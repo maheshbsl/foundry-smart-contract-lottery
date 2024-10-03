@@ -33,6 +33,7 @@ import {console} from "forge-std/console.sol";
  * @notice This contract is for creating a sample Raffle
  * @dev   Impliment Chainlink VRF
  */
+
 contract Raffle is VRFConsumerBaseV2Plus {
     /* errors   */
     error Raffle_SendMoreToEnterRaffle();
@@ -63,6 +64,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     event RaffleEntered(address indexed player);
     event WinnerPicked(address indexed winner);
     event RequestFulfilled(uint256 requestId, uint256[] randomWords);
+    event RequestedRaffleWinner(uint256 requestId);
 
     constructor(
         uint256 entranceFee,
@@ -149,7 +151,8 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
         //`s_vrfCoordinator.requestRandomWords` returns a uint256 requestId
         uint256 requestId = s_vrfCoordinator.requestRandomWords(request);
-        console.log(requestId);
+        emit RequestedRaffleWinner(requestId);
+        
     }
 
     function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords) internal override {
